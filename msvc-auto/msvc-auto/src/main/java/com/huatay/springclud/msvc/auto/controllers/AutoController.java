@@ -84,9 +84,10 @@ public class AutoController {
         }
     }
 
-  /*@GetMapping("/auto-por-curso")
-    public ResponseEntity<List<Mecanico>>  listarAlumnosporCurso(@RequestParam List<Long> ids){
-        return  ResponseEntity.ok(service.listarPorIds(ids));
-    }*/
+    @GetMapping("/autos-por-mecanico")
+    public ResponseEntity<?> obtenerAutosPorMecanico(@RequestParam List<Long> ids){
+        return ResponseEntity.ok(service.listarPorIds(ids));
+    }
+
 }
 

@@ -1,5 +1,6 @@
 package com.huatay.springclud.msvc.mecanico.controllers;
 
+import com.huatay.springclud.msvc.mecanico.models.Auto;
 import com.huatay.springclud.msvc.mecanico.models.entity.Mecanico;
 import com.huatay.springclud.msvc.mecanico.services.MecanicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +86,59 @@ public class MecanicoController {
         }
     }
 
-  /*  @GetMapping("/mecanico-por-curso")
-    public ResponseEntity<List<Mecanico>>  listarAlumnosporCurso(@RequestParam List<Long> ids){
-        return  ResponseEntity.ok(service.listarPorIds(ids));
-    }*/
+
+    //metodos remotos
+
+
+
+    @PutMapping("/asignar-auto/{mecanicoId}")
+    public ResponseEntity<?> asignarUsuario(@RequestBody Auto auto, @PathVariable Long mecanicoId) {
+        return manejarDatos(service.asignarAuto(auto, mecanicoId), "asignar");
+    }
+
+    @PostMapping("/crear-auto/{mecanicoId}")
+    public ResponseEntity<?> crearUsuario(@RequestBody Auto auto, @PathVariable Long mecanicoId) {
+        return manejarDatos(service.crearAuto(auto, mecanicoId), "crear");
+    }
+
+    @DeleteMapping("/desasignar/{mecanicoId}")
+    public ResponseEntity<?> eliminarUsuario(@RequestBody Auto auto, @PathVariable Long mecanicoId) {
+        return  manejarDatos(service.eliminarAuto(auto, mecanicoId), "eliminar");
+    }
+
+
+    private ResponseEntity<?> manejarDatos(Optional<Auto> optionalUsuario, String operation) {
+        if (optionalUsuario.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(optionalUsuario.get());
+        } else {
+            return manejarException(operation);
+        }
+    }
+
+    private ResponseEntity<?> manejarException(String operation) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Collections.singletonMap("Mensaje: ", String.format("No se pudo %s el auto o error en la comunicación", operation)));
+    }
+
+
+
+
+    @GetMapping("/mecAutos/{id}")
+    public ResponseEntity<?> detalleCurUsers(@PathVariable Long id){
+        Optional<Mecanico> op = service.porIdConAutos(id);
+        if(op.isPresent()){
+            return ResponseEntity.ok(op.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @DeleteMapping("/eliminar-mecAutos/{id}")
+    public ResponseEntity<?> eliminarMecanicoAutoPorId(@PathVariable Long id){
+        service.eliminarMecanicoAutoPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 }

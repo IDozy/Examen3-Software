@@ -1,5 +1,6 @@
 package com.huatay.springclud.msvc.auto.services;
 
+import com.huatay.springclud.msvc.auto.clients.MecanicoClientRest;
 import com.huatay.springclud.msvc.auto.models.entity.Auto;
 import com.huatay.springclud.msvc.auto.repositories.AutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ public class AutoServiceImpl implements AutoService{
 
     @Autowired // inyecta la dependencia de una clase que tiene metodos a otra clase
     private AutoRepository repository;
+
+    @Autowired
+    private MecanicoClientRest client;
+
 
     @Override
     @Transactional
@@ -35,8 +40,15 @@ public class AutoServiceImpl implements AutoService{
     @Override
     public void eliminar(Long id) {
         repository.deleteById(id);
+        client.eliminarMecanicoAutoPorId(id);
     }
 
     @Override
     public Optional<Auto> porPlaca(String placa)  { return repository.findByPlaca(placa);}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Auto> listarPorIds(Iterable<Long> ids) {
+        return (List<Auto>) repository.findAllById(ids);
+    }
 }

@@ -15,7 +15,7 @@ public class Auto {
 
     @NotBlank
     @Column(unique = true)
-    private String Placa;
+    private String placa;
 
     @NotBlank
     @DateTimeFormat(pattern = "yyyy")
@@ -30,11 +30,11 @@ public class Auto {
     }
 
     public String getPlaca() {
-        return Placa;
+        return placa;
     }
 
     public void setPlaca(String placa) {
-        Placa = placa;
+        placa = placa;
     }
 
     public String getAniofab() {

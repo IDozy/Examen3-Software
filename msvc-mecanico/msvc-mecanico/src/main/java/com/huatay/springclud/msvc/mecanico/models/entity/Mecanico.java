@@ -1,7 +1,11 @@
 package com.huatay.springclud.msvc.mecanico.models.entity;
 
+import com.huatay.springclud.msvc.mecanico.models.Auto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -17,6 +21,22 @@ public class Mecanico {
 
     @NotBlank
     private String experiencia;
+
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="auto_id")
+    private List<Mantenimiento> mantenimientoList;
+
+    @Transient
+    private List<Auto> autoList;
+
+
+    public Mecanico() {
+        mantenimientoList = new ArrayList<>();
+        autoList = new ArrayList<>();
+    }
+
+
 
     public Long getIdMecanico() {
         return idMecanico;
@@ -40,5 +60,37 @@ public class Mecanico {
 
     public void setExperiencia(String experiencia) {
         this.experiencia = experiencia;
+    }
+
+
+    public void addMantenimiento(Mantenimiento mantenimiento){
+        mantenimientoList.add(mantenimiento);
+    }
+    public void removeMantenimiento(Mantenimiento mantenimiento){
+        mantenimientoList.remove(mantenimiento);
+    }
+
+    public List<Mantenimiento> getMantenimiento() {
+        return mantenimientoList;
+    }
+    public void setMantenimiento(List<Mantenimiento> mantenimiento) {
+        this.mantenimientoList = mantenimiento;
+    }
+
+
+    public List<Mantenimiento> getMantenimientoList() {
+        return mantenimientoList;
+    }
+
+    public void setMantenimientoList(List<Mantenimiento> mantenimientoList) {
+        this.mantenimientoList = mantenimientoList;
+    }
+
+    public List<Auto> getAutoList() {
+        return autoList;
+    }
+
+    public void setAutoList(List<Auto> autoList) {
+        this.autoList = autoList;
     }
 }

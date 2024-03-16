@@ -13,4 +13,8 @@ public interface AutoService {
     Auto guardar(Auto auto);
     void eliminar(Long id);
     Optional<Auto> porPlaca(String placa);
+
+
+    List<Auto> listarPorIds(Iterable<Long> ids);
+
 }
